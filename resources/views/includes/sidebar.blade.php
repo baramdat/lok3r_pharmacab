@@ -94,6 +94,7 @@
                         <a class="side-menu__item" data-bs-toggle="slide" href="{{ url('/booking/add') }}"><i
                                 class="side-menu__icon fe fe-arrow-right"></i><span class="side-menu__label">Book A
                                 Locker</span></a>
+                                
                     </li>
 
                 @endif
