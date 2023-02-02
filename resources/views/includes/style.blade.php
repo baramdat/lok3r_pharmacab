@@ -47,5 +47,11 @@
 
     }
 
-    
+    .btn-primary {
+        background-color: #006f94 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #068dba !important;;
+    }
 </style>
