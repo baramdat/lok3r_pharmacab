@@ -25,7 +25,7 @@
    <style>
     .page {
     background-color: rgb(3, 42, 42);
-
+    }
    </style>
 </head>
 
