@@ -436,7 +436,7 @@ a.text-primary:focus {
 
 .login-img {
     position: relative;
-    background-image: url(../images/media/bg2.jpg);
+    background-image: url(../images/media/bg-img1.jpg);
 }
 
 .login-img::before {

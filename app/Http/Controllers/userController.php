@@ -55,11 +55,11 @@ class userController extends Controller
             
             $usr->assignRole($request->role);
     
-            // Mail::send('templates.email.add_user', ['user' => $user,'password'=>$pin ], function ($message) use ($user) {
-            //     $message->to($user->email)
-            //         ->from(env('MAIL_FROM_ADDRESS'),env('APP_NAME'))
-            //         ->subject("Your account has been created");
-            // });
+            Mail::send('templates.email.add_user', ['user' => $user,'password'=>$pin ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->from(env('MAIL_FROM_ADDRESS'),env('APP_NAME'))
+                    ->subject("Your account has been created");
+            });
 
             $responseArray=[];
             $responseArray['token']=$usr->createToken(env('APP_NAME'))->accessToken;

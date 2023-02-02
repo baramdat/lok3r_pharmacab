@@ -22,7 +22,7 @@
 
     <!-- STYLE CSS -->
     @include('includes.style')
-
+   
 </head>
 
 <body class="app sidebar-mini ltr">
