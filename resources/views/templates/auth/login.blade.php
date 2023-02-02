@@ -22,7 +22,11 @@
 
     <!-- STYLE CSS -->
     @include('includes.style')
-   
+   <style>
+    .page {
+    background-color: rgb(3, 42, 42);
+
+   </style>
 </head>
 
 <body class="app sidebar-mini ltr">
