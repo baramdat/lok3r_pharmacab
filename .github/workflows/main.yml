@@ -11,6 +11,6 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
-        server: ftp@lok3r.net
+        server: ftp.lok3r.net
         username: pharmacab@lok3r.net
         password: w@oAr;qD*#v3
