@@ -471,7 +471,7 @@ class LockerController extends Controller
             $filterLockerNo = $request->filterLockerNo;
             $filterLength=$request->filterLength;
             $locker_history=Inventory_record::query();
-            if(Auth::user()->hasRole('Super Admin')){
+            if(Auth::user()->hasRole('Site Admin')){
                 $locker_history=$locker_history->where('site_id', Auth::user()->site_id);
             }else if(Auth::user()->hasRole('Site User')){
                 $locker_history=$locker_history->where('user_id', Auth::user()->id);
