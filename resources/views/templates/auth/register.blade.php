@@ -23,11 +23,11 @@
 
     <!-- COLOR SKIN CSS -->
     <link id="theme" rel="stylesheet" type="text/css" media="all" href="../assets/colors/color1.css" />
-    <style>
+    {{-- <style>
         .page {
             background-color: rgb(3, 42, 42);
         }
-    </style>
+    </style> --}}
 
 </head>
 

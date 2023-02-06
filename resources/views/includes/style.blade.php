@@ -52,6 +52,9 @@
     }
 
     .btn-primary:hover {
-        background-color: #068dba !important;;
+        background-color: #068dba !important;
     }
+    .btn-primary {
+    border-color: #085974 !important;}
+
 </style>

@@ -11,10 +11,10 @@
         <!-- PAGE-HEADER Breadcrumbs-->
         <div class="page-header">
             <div>
-                <h1 class="page-title">Lockers History</h1>
+                <h1 class="page-title">Products History</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a> </li>
-                    <li class="breadcrumb-item active" aria-current="page">Lockers History</li>
+                    <li class="breadcrumb-item active" aria-current="page">Products History</li>
                 </ol>
             </div>
         </div>

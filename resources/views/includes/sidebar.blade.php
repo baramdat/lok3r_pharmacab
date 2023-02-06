@@ -65,11 +65,13 @@
                             class="angle fe fe-chevron-right"></i></a>
                     <ul class="slide-menu">
                         <li><a href="{{ url('/locker/list') }}" class="slide-item"> Lockers list</a></li>
+                        @if (Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Site Admin'))
                         <li><a href="{{ url('/locker/add') }}" class="slide-item"> Locker add</a></li>
+                        @endif
                     </ul>
                 </li>
 
-                @if (Auth::user()->hasRole('Super Admin'))
+                {{-- @if (Auth::user()->hasRole('Super Admin'))
                     <li class="slide">
                         <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
                                 class="side-menu__icon fe fe-dollar-sign"></i><span
@@ -79,9 +81,9 @@
                             <li><a href="{{ url('/pricing/history') }}" class="slide-item"> Pricing History</a></li>
                         </ul>
                     </li>
-                @endif
+                @endif --}}
                 
-
+{{-- 
                 @if (Auth::user()->hasRole('User'))
 
                     <li class="slide">
@@ -97,7 +99,7 @@
                                 
                     </li>
 
-                @endif
+                @endif --}}
 
                 {{-- <li class="slide">
                     <a class="side-menu__item" data-bs-toggle="slide" href="{{ url('/booking/list') }}"><i
@@ -137,6 +139,7 @@
                         <ul class="slide-menu">
                             <li><a href="{{ route('products.list') }}" class="slide-item">Products list</a></li>
                             <li><a href="{{ route('add.products') }}" class="slide-item"> Products add</a></li>
+                            <li><a href="{{ url('locker/open/history') }}" class="slide-item"> Products History</a></li>
                         </ul>
                     </li>
                 @endif

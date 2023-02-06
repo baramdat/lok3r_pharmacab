@@ -340,7 +340,7 @@ use \App\Http\Controllers\BookingController;
             </div>
         </div>
 
-        <div class="col-lg-12">
+        {{-- <div class="col-lg-12">
             <div class="card border p-0 overflow-hidden shadow-none">
                 <div class="card-header">
                     <div class="media mt-0">
@@ -389,7 +389,7 @@ use \App\Http\Controllers\BookingController;
 
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-12">
             <div class="card border p-0 overflow-hidden shadow-none">
                 <div class="card-header">

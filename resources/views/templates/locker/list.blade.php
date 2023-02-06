@@ -17,8 +17,11 @@
                     <li class="breadcrumb-item active" aria-current="page">Lockers List</li>
                 </ol>
             </div>
-            <a role="button" class="btn btn-dealer" href="{{ url('/locker/add') }}"> <span class="fe fe-plus fs-14"></span>
-                Add Locker</a>
+            @if (!Auth::user()->hasRole('Site User'))
+                <a role="button" class="btn btn-dealer" href="{{ url('/locker/add') }}"> <span
+                        class="fe fe-plus fs-14"></span>
+                    Add Locker</a>
+            @endif
         </div>
         <!-- PAGE-HEADER END -->
 
@@ -51,20 +54,20 @@
                         </select>
                     </div>
                     <!-- <div class="col-6 col-lg-2 mb-1">
-                                            <label for="" class="fw-bold mb-1">Search by year:</label>
-                                            <select class="form-control form-select" name="expiry_year" id="filterYear">
-                                                <option value="All" selected>All</option>
-                                                <option value="2022">2022</option>
-                                                <option value="2023">2023</option>
-                                                <option value="2024">2024</option>
-                                                <option value="2025">2025</option>
-                                                <option value="2026">2026</option>
-                                                <option value="2027">2027</option>
-                                                <option value="2028">2028</option>
-                                                <option value="2029">2029</option>
-                                                <option value="2030">2030</option>
-                                            </select>
-                                        </div> -->
+                                                <label for="" class="fw-bold mb-1">Search by year:</label>
+                                                <select class="form-control form-select" name="expiry_year" id="filterYear">
+                                                    <option value="All" selected>All</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2024">2024</option>
+                                                    <option value="2025">2025</option>
+                                                    <option value="2026">2026</option>
+                                                    <option value="2027">2027</option>
+                                                    <option value="2028">2028</option>
+                                                    <option value="2029">2029</option>
+                                                    <option value="2030">2030</option>
+                                                </select>
+                                            </div> -->
                     <div class="col-12 col-lg-2 mb-1 ">
                         <label for="" class="mb-1"></label>
 
@@ -165,7 +168,7 @@
                                         *</span></label>
                                 <select class="form-select" name="product" id="product">
                                     @foreach ($inventory_item as $item)
-                                        <option value="{{ $item->id }}">{{ucwords($item->name) }}</option>
+                                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -176,9 +179,9 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label text-start fw-bold">Action <span class="text-danger">
-                                    *</span></label>
+                                        *</span></label>
                                 <label class="radio-inline pull-left" style="padding-right: 20px;padding-left: 10px;">
-                                    <input type="radio" name="product_action" checked value="add" >Add
+                                    <input type="radio" name="product_action" checked value="add">Add
                                 </label>
                                 <label class="radio-inline pull-left pe-1">
                                     <input type="radio" id="subtract" name="product_action" value="sub">Subtract

@@ -23,10 +23,11 @@
     <!-- STYLE CSS -->
     @include('includes.style')
    <style>
-    .page {
-    background-color: rgb(3, 42, 42);
-    }
-   </style>
+        .page {
+            background-color: rgb(3, 42, 42);
+        }
+    </style>
+  
 </head>
 
 <body class="app sidebar-mini ltr">
@@ -63,10 +64,10 @@
                                 <div class="tab-menu-heading">
                                     <div class="tabs-menu1">
                                         <!-- Tabs -->
-                                        <ul class="nav panel-tabs">
+                                        {{-- <ul class="nav panel-tabs">
                                             <li class="mx-0"><a href="#tab5" class="active"
                                                     data-bs-toggle="tab">Email</a></li>
-                                        </ul>
+                                        </ul> --}}
                                     </div>
                                 </div>
                                 <div class="panel-body tabs-menu-body p-0 pt-5">
@@ -101,10 +102,10 @@
                                                     <i class="fa fa-spinner fa-pulse mx-1" style="display: none;"></i>
                                                     Sign in</button>
                                             </div>
-                                            <div class="text-center pt-3">
+                                            {{-- <div class="text-center pt-3">
                                                 <p class="text-dark mb-0">Not a member?<a href="{{url('/register')}}"
                                                         class="text-primary ms-1">Sign up</a></p>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -153,11 +154,7 @@
                     } else if (response["status"] == "success") {
                         toastr.success('Success', response["msg"])
                         $("#login_form")[0].reset();
-                        if(response.data == 'User'){
-                            window.location.href = "{{url('/booking/add')}}";
-                        }else{
                             window.location.href = "{{url('/dashboard')}}";
-                        }
                          
                     }
 

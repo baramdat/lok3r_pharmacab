@@ -22,11 +22,11 @@
     <!-- BOOTSTRAP CSS -->
     @include('includes.style')
 
-    <style>
+    {{-- <style>
         .page {
         background-color: rgb(3, 42, 42);
         }
-       </style>
+       </style> --}}
 </head>
 
 <body class="app sidebar-mini ltr">

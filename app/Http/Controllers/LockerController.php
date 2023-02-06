@@ -441,12 +441,12 @@ class LockerController extends Controller
                             <td>
                                 <a  href="javascript:;" state="2" lockerId="'.$locker->id.'" relay="'.$locker->relay.'" class="btn btn-danger btn-sm relayState">Open Locker</a>
 
-                                <a  href="/locker/details/'.$locker->id.'" class="btn btn-info btn-sm">Details</a>
+                               '.(!Auth::user()->hasRole('Site User')?' <a  href="/locker/details/'.$locker->id.'" class="btn btn-info btn-sm">Details</a>
 
                                 '.($locker->status == 'occupied' ? '<small>Can’t be made inactive or be deleted</small>' : '<div class="btn-group btn-group-sm" role="group">
                                 <a  href="/locker/edit/'.$locker->id.'" class="btn btn-warning btnEdit">Edit</a>
                                 <a  class="btn btn-danger text-white btnDelete" id="'.$locker->id.'">Delete</a>
-                            </div>').'
+                            </div>'):'').'
                                 
                             </td>
                         </tr>
@@ -471,11 +471,10 @@ class LockerController extends Controller
             $filterLockerNo = $request->filterLockerNo;
             $filterLength=$request->filterLength;
             $locker_history=Inventory_record::query();
-            if(!Auth::user()->hasRole('Super Admin')){
-                // $locker_history= Locker_history::join('users', 'users.id', '=', 'locker_history.user_id')
-                // ->join('sites', 'sites.id', '=', 'locker_history.site_id')
-                // ->join('lockers', 'lockers.id', '=', 'locker_history.locker_id');
+            if(Auth::user()->hasRole('Super Admin')){
                 $locker_history=$locker_history->where('site_id', Auth::user()->site_id);
+            }else if(Auth::user()->hasRole('Site User')){
+                $locker_history=$locker_history->where('user_id', Auth::user()->id);
             }
             // else{
             //     $locker_history= Locker_history::join('users', 'users.id', '=', 'locker_history.user_id')
