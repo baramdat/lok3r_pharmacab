@@ -9,6 +9,7 @@ use App\Http\Controllers\LockerController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\RequestedController;
 use App\Http\Controllers\CategoriesController;
 
 /*
@@ -95,6 +96,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/add/products', [InventoryController::class,'add'])->name('add.products')->middleware('isLogin');
     Route::view('products/list', 'templates.products.list')->name('products.list')->middleware('isLogin');
     Route::get('/products/edit/{id}', [InventoryController::class,'viewEdit'])->middleware('isLogin');
+    
+    // requested product
+    Route::get('/add/request/product', [RequestedController::class,'index'])->name('add.request.product')->middleware('isLogin');
+    Route::get('/request/list', [RequestedController::class,'list'])->name('request.list')->middleware('isLogin');
+    
     
 });
 

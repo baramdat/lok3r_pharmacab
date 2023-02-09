@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    Lockers List
+    Request List
 @endsection
 
 @section('content')
@@ -11,16 +11,16 @@
         <!-- PAGE-HEADER Breadcrumbs-->
         <div class="page-header">
             <div>
-                <h1 class="page-title">Lockers List</h1>
+                <h1 class="page-title">Request List</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a> </li>
-                    <li class="breadcrumb-item active" aria-current="page">Lockers List</li>
+                    <li class="breadcrumb-item active" aria-current="page">Request List</li>
                 </ol>
             </div>
-            @if (!Auth::user()->hasRole('Site User'))
-                <a role="button" class="btn btn-dealer" href="{{ url('/locker/add') }}"> <span
+            @if (Auth::user()->hasRole('Site User'))
+                <a role="button" class="btn btn-dealer" href="{{ url('/add/products') }}"> <span
                         class="fe fe-plus fs-14"></span>
-                    Add Locker</a>
+                    Add Product</a>
             @endif
         </div>
         <!-- PAGE-HEADER END -->
@@ -30,44 +30,17 @@
             <div class="card-body px-3 py-2 pt-3">
                 <div class="form-row align-items-center">
                     <div class="col-12 col-lg-6 mb-1">
-                        <label for="" class="fw-bold mb-1">Search by locker no. :</label>
-                        <input type="text" id="search" class="form-control" placeholder="LS-001">
+                        <label for="" class="fw-bold mb-1">Search name :</label>
+                        <input type="text" id="search" class="form-control" placeholder="Search ...">
                     </div>
-                    <div class="col-12 col-lg-6 mb-1">
-                        <label for="" class="fw-bold mb-1">Row:</label>
-                        <input type="number" id="filterRow" name="filterRow" class="form-control" placeholder="">
-                    </div>
-                    <div class="col-12 col-lg-6 mb-1">
-                        <label for="" class="fw-bold mb-1">Column:</label>
-                        <input type="number" id="filterColumn" name="filterColumn" class="form-control" placeholder="">
-                    </div>
-                    <div class="col-6 col-lg-2 mb-1">
-                        <?php
-                        $sizesArr = App\Models\LockerSize::all();
-                        ?>
-                        <label for="" class="fw-bold mb-1">Search by size:</label>
-                        <select class="form-control form-select" name="filterSize" id="filterSize">
-                            <option value="all">Show All</option>
-                            @foreach ($sizesArr as $size)
-                                <option value="{{ $size->id }}">{{ $size->size }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <!-- <div class="col-6 col-lg-2 mb-1">
-                                                <label for="" class="fw-bold mb-1">Search by year:</label>
-                                                <select class="form-control form-select" name="expiry_year" id="filterYear">
-                                                    <option value="All" selected>All</option>
-                                                    <option value="2022">2022</option>
-                                                    <option value="2023">2023</option>
-                                                    <option value="2024">2024</option>
-                                                    <option value="2025">2025</option>
-                                                    <option value="2026">2026</option>
-                                                    <option value="2027">2027</option>
-                                                    <option value="2028">2028</option>
-                                                    <option value="2029">2029</option>
-                                                    <option value="2030">2030</option>
-                                                </select>
-                                            </div> -->
+                    {{-- <div class="col-6 col-lg-2 mb-1">
+                    <label for="" class="fw-bold mb-1">Search by status:</label>
+                    <select class="form-control form-select" name="filterStatus" id="filterStatus">
+                        <option value="all">Show All</option>
+                        <option value="active">Parent</option>                           
+                        <option value="inactive">Child</option>                           
+                    </select>
+                </div> --}}
                     <div class="col-12 col-lg-2 mb-1 ">
                         <label for="" class="mb-1"></label>
 
@@ -89,7 +62,7 @@
                     <div class="card-header  mx-1">
                         <div class="media">
                             <div class="media-body">
-                                <h6 class="mb-0 mt-1 text-muted">Lockers list</h6>
+                                <h6 class="mb-0 mt-1 text-muted">Request list</h6>
                             </div>
                         </div>
                     </div>
@@ -105,17 +78,13 @@
                                                         <th class="bg-transparent border-bottom-0" style="width: 5%;">
                                                             ID</th>
                                                         <th class="bg-transparent border-bottom-0" style="width: 5%;">
-                                                            Locker No</th>
-                                                        <th class="bg-transparent border-bottom-0" style="width: 5%;">
-                                                            Site Name</th>
-                                                        <th class="bg-transparent border-bottom-0" style="width: 5%;">
-                                                            Relay #</th>
+                                                            User </th>
                                                         <th class="bg-transparent border-bottom-0">
-                                                            Size</th>
+                                                            Site </th>
                                                         <th class="bg-transparent border-bottom-0">
-                                                            Row</th>
+                                                            Product</th>
                                                         <th class="bg-transparent border-bottom-0">
-                                                            Column</th>
+                                                            Quantity</th>
                                                         <th class="bg-transparent border-bottom-0">
                                                             Status</th>
                                                         <th class="bg-transparent border-bottom-0">
@@ -129,14 +98,15 @@
                                         </div>
                                         <div id="divLoader" class="text-center pt-5" style="height:300px;">
                                             <span>
-                                                <i class="fe fe-spinner fa-spin"></i> Lockers are being loading.. It
+                                                <i class="fe fe-spinner fa-spin"></i> Reqeusted products are being loading..
+                                                It
                                                 might take few
                                                 seconds.
                                             </span>
                                         </div>
                                         <div class="row text-center" id="divNotFound" style="display:none">
                                             <h6 class="mt-lg-5" style=""><i class="bx bx-window-close"></i>
-                                                {{ __('No Locker Found') }} !
+                                                {{ __('No Request Found') }} !
                                             </h6>
                                         </div>
                                         <div class="col-lg-12 mt-3">
@@ -153,53 +123,30 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="lockerHistoryModel">
+        <div class="modal fade" id="requestStatusPopup">
             <div class="modal-dialog modal-dialog-centered text-center" role="document">
                 <div class="modal-content modal-content-demo">
                     <div class="modal-header">
-                        <h6 class="modal-title fw-bold">Locker history</h6><button aria-label="Close" class="btn-close"
+                        <h6 class="modal-title fw-bold">Rquest Status</h6><button aria-label="Close" class="btn-close"
                             data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                        <form method="post"id="add_locker_history">
+                        <form method="post"id="update_request_status">
 
                             <div class="form-group">
-                                <label class="form-label text-start fw-bold">Select Product<span class="text-danger">
+                                <label class="form-label text-start fw-bold">Select status<span class="text-danger">
                                         *</span></label>
-                                <select class="form-select" name="product" id="product">
-                                    @foreach ($inventory_item as $item)
-                                        <option value="{{ $item->item_id }}">{{ ucwords($item->inventory_item->name) }}</option>
-                                    @endforeach
+                                <select class="form-select" name="status" id="status">
+                                    <option value="open">Open</option>
+                                    <option value="closed">Closed</option>
+                                    <option value="rejected">Rejected</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label text-start fw-bold">Quantity<span class="text-danger">
-                                        *</span></label>
-                                <input type="number" class="form-control" name="quantity" id="quantity" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label text-start fw-bold">Action <span class="text-danger">
-                                        *</span></label>
-                                <label class="radio-inline pull-left" style="padding-right: 20px;padding-left: 10px;">
-                                    <input type="radio" name="product_action" checked value="add">Add
-                                </label>
-                                <label class="radio-inline pull-left pe-1">
-                                    <input type="radio" id="subtract" name="product_action" value="sub">Subtract
-                                </label>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label class="form-label text-start fw-bold">Enter reason why your opening locker? <span
-                                        class="text-danger">*</span></label>
-                                <textarea class="form-control" id="locker_opening_reason" name="locker_opening_reason" rows="3" required></textarea>
-                                <input type="hidden" id="locker_id_history" name="locker_id_history">
-                                <input type="hidden" id="locker_id_state" name="locker_id_state">
-                                <input type="hidden" id="locker_id_relay" name="locker_id_relay">
-                            </div>
+                            <input type="hidden" id="request_id" name="request_id">
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-dealer" id="btnSubmit"> <i
                                         class="fa fa-spinner fa-pulse" style="display: none;"></i>
-                                    Save</button>
+                                    Update</button>
                                 <button class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             </div>
                         </form>
@@ -220,38 +167,32 @@
 
             var filterLength = 1;
             var total = 0;
-            var filterLockerNo = $("#search").val();
+            var filterName = $("#search").val();
+            var filterStatus = $("#filterStatus").val();
             var contentPagination = $("#content-pagination");
             var contentNotFound = $("#divNotFound");
             var contentFound = $("#divData");
-            var filterSize = $("#filterSize").val();
-            var filterRow = $("#filterRow").val();
-            var filterColumn = $("#filterColumn").val();
 
             function setFilters() {
-                filterLockerNo = $("#search").val()
-                filterSize = $("#filterSize").val();
-                filterRow = $("#filterRow").val();
-                filterColumn = $("#filterColumn").val();
-
+                filterName = $("#search").val()
+                filterStatus = $("#filterStatus").val();
                 filterLength = 10;
             }
-            lockerCount()
 
-            function lockerCount() {
+            dataCount()
+
+            function dataCount() {
                 $("#tBody").html('');
                 setFilters()
                 contentPagination.twbsPagination('destroy');
-
                 $.ajax({
-                    url: '/api/locker/count',
+                    url: '/api/product/request/count',
                     type: "get",
                     data: {
-                        filterLockerNo: filterLockerNo,
+                        filterName: filterName,
                         filterLength: filterLength,
-                        filterSize: filterSize,
-                        filterRow: filterRow,
-                        filterColumn: filterColumn,
+                        filterStatus: filterStatus,
+
                     },
                     dataType: "JSON",
                     cache: false,
@@ -265,7 +206,7 @@
                             $("#tBody").html('');
                         } else if (response["status"] == "fail") {
                             $("#tBody").html('');
-                            toastr.error('Failed', response["msg"])
+                            // toastr.error('Failed', response["msg"])
                             $("#divNotFound").css('display', 'block')
                             $("#divLoader").css('display', 'none')
                             $("#divData").css('display', 'none')
@@ -277,7 +218,7 @@
                 });
             }
 
-            function lockers(offset) {
+            function data(offset) {
                 setFilters()
                 $("#content-pagination").css('display', 'none')
 
@@ -286,15 +227,14 @@
                 $("#divData").css('display', 'none')
                 $("#divNotFound").css('display', 'none')
                 $.ajax({
-                    url: '/api/locker/list',
+                    url: '/api/request/product/list',
                     type: "get",
                     data: {
-                        filterLockerNo: filterLockerNo,
+                        filterName: filterName,
                         filterLength: filterLength,
-                        filterSize: filterSize,
-                        filterRow: filterRow,
-                        filterColumn: filterColumn,
-                        offset: offset
+                        filterStatus: filterStatus,
+                        offset: offset,
+
                     },
                     dataType: "JSON",
                     cache: false,
@@ -305,7 +245,6 @@
 
                     },
                     success: function(response) {
-                        console.log(response);
                         if (response["status"] == "fail") {
                             $("#tBody").html('');
 
@@ -313,7 +252,7 @@
                             $("#divData").css('display', 'none')
                             $("#content-pagination").css('display', 'none')
                             $("#divNotFound").css('display', 'block')
-                            toastr.error('Failed', response["msg"])
+                            // toastr.error('Failed', response["msg"])
                         } else if (response["status"] == "success") {
                             $("#divNotFound").css('display', 'none')
                             $("#divLoader").css('display', 'none')
@@ -336,8 +275,7 @@
                         totalPages: totalPages,
                         visiblePages: 4,
                         onPageClick: function(event, page) {
-                            lockers((page === 1 ? page - 1 : ((page - 1) * filterLength)),
-                                filterLength);
+                            data((page === 1 ? page - 1 : ((page - 1) * filterLength)), filterLength);
                         }
                     });
                 } else {
@@ -347,29 +285,30 @@
                 }
             }
 
-            $(document).on('keyup', '#search', function() {
-                $("#tBody").html('');
-                setFilters()
-                lockerCount()
-            });
+
+            // $(document).on('keyup', '#search', function () {
+            //     $("#tBody").html('');
+            //     setFilters()
+            //     dataCount()
+            // });
 
             $(document).on('click', '#btnFilter', function(e) {
                 setFilters()
-                lockerCount()
+                dataCount()
             })
 
             $(document).on('click', '#btnReset', function(e) {
                 $("#search").val('')
                 $("#filterSize").val('All')
                 setFilters()
-                lockerCount()
+                dataCount()
             })
 
             $(document).on('click', '.btnDelete', function(e) {
                 var id = $(this).attr('id')
                 Swal.fire({
                         title: "Are you sure?",
-                        text: "You will not be able to recover this locker!",
+                        text: "You will not be able to recover this product!",
                         type: "warning",
                         buttons: true,
                         confirmButtonColor: "#ff5e5e",
@@ -381,18 +320,18 @@
                     .then((deleteThis) => {
                         if (deleteThis.isConfirmed) {
                             $.ajax({
-                                url: '/api/locker/delete/' + id,
+                                url: '/api/request/product/delete/' + id,
                                 type: "delete",
                                 dataType: "JSON",
                                 success: function(response) {
                                     console.log(response)
                                     if (response["status"] == "fail") {
-                                        Swal.fire("Failed!", "Failed to delete locker.",
+                                        Swal.fire("Failed!", "Failed to delete site.",
                                             "error");
                                     } else if (response["status"] == "success") {
-                                        Swal.fire("Deleted!", "Locker has been deleted.",
+                                        Swal.fire("Deleted!", "Product has been deleted.",
                                             "success");
-                                        lockerCount()
+                                        dataCount()
                                     }
                                 },
                                 error: function(error) {
@@ -433,52 +372,10 @@
                     async: false
                 });
             });
-
-
-            // open close relay
-            $(document).on('click', '.relayState', function(e) {
-
-                $('#locker_id_history').val($(this).attr('lockerId'));
-                $('#locker_id_state').val($(this).attr('state'));
-                $('#locker_id_relay').val($(this).attr('relay'));
-                //  var lockerId = $(this).attr('lockerId');
-                //  var relay = $(this).attr('relay');
-                //  var state = $(this).attr('state');
-                //  console.log('locker'+lockerId+'state'+state+'relay'+state);
-                $('#lockerHistoryModel').modal('show');
-
-            });
-
-            function locker_histoy(lockerId, relay, state) {
-                $.ajax({
-                    url: '/api/relay/state/update',
-                    type: "POST",
-                    dataType: "JSON",
-                    data: {
-                        lockerId: lockerId,
-                        relay: relay,
-                        state: state
-                    },
-                    success: function(response) {
-                        if (response["status"] == "fail") {
-                            toastr.error('Failed', response["msg"])
-                        } else if (response["status"] == "success") {
-                            toastr.success('Success', response["msg"])
-                        }
-                    },
-                    error: function(error) {
-                        // console.log(error);
-                    },
-                    async: false
-                });
-            }
-            $("#add_locker_history").on('submit', (function(e) {
-                var lockerId = $('#locker_id_history').val();
-                var relay = $('#locker_id_relay').val();
-                var state = $('#locker_id_state').val();
+            $("#update_request_status").on('submit', (function(e) {
                 e.preventDefault();
                 $.ajax({
-                    url: '/api/locker_histor/add',
+                    url: '/api/update/request/status',
                     type: "POST",
                     data: new FormData(this),
                     dataType: "JSON",
@@ -498,10 +395,10 @@
                         if (response["status"] == "fail") {
                             toastr.error('Failed', response["msg"])
                         } else if (response["status"] == "success") {
-                            locker_histoy(lockerId, relay, state);
-                            //toastr.success('Success', response["msg"])
-                            $("#add_locker_history")[0].reset();
-                            $('#lockerHistoryModel').modal('hide');
+                            toastr.success('Success', response["msg"])
+                            $("#update_request_status")[0].reset();
+                            $('#requestStatusPopup').modal('hide');
+                            dataCount();
                         }
                     },
                     error: function(error) {
@@ -510,5 +407,10 @@
                 });
             }));
         });
+
+        function updateStatus(id) {
+            $('#request_id').val(id);
+           $('#requestStatusPopup').modal('show');
+        }
     </script>
 @endsection

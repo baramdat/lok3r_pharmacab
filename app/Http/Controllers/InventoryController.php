@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categories;
 use App\Models\Inventory;
-use App\Models\Inventory_items;
+use App\Models\Categories;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Inventory_items;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
@@ -40,6 +41,7 @@ class InventoryController extends Controller
                 $inventery->last_quantity = $request->quantity;
                 $inventery->parent_category_id = $request->parent;
                 $inventery->child_category_id = $request->child;
+                $inventery->site_id =Auth::user()->site_id;
                 $inventery->save();
                 return response()->json([
                     'status' => 'success',
@@ -82,7 +84,7 @@ class InventoryController extends Controller
             //     $result = $result->where('status',$filterStatus);
             // }  
 
-            $count = $result->count();
+            $count = $result->where('site_id',Auth::user()->site_id)->count();
             if ($count > 0) {
                 return response()->json(['status' => 'success', 'data' => $count]);
             } else {
@@ -118,7 +120,7 @@ class InventoryController extends Controller
             }
             $i = 1;
 
-            $products = $result->take($filterLength)->skip($request->offset)->orderBy('id', 'DESC')->get();
+            $products = $result->where('site_id',Auth::user()->site_id)->take($filterLength)->skip($request->offset)->orderBy('id', 'DESC')->get();
 
             if (isset($products) && sizeof($products) > 0) {
                 $html = '';

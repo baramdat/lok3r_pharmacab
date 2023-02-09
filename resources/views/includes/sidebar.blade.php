@@ -120,7 +120,20 @@
                     <a class="side-menu__item" data-bs-toggle="slide" href="{{ url('/notification') }}"><i
                             class="side-menu__icon fe fe-bell"></i><span class="side-menu__label">Notification</span></a>
                 </li> -->
-
+                
+                <li class="slide">
+                    <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i
+                            class="side-menu__icon fe fe-bar-chart-2"></i><span
+                            class="side-menu__label">Requested Product</span><i
+                            class="angle fe fe-chevron-right"></i></a>
+                    <ul class="slide-menu">
+                        <li><a href="{{ route('request.list') }}" class="slide-item"> Requested list</a></li>
+                        @if (Auth::user()->hasRole('Site User'))
+                        <li><a href="{{ route('add.request.product') }}" class="slide-item"> Request add</a></li>
+                        @endif
+                    </ul>
+                </li>
+                
                 @if (Auth::user()->hasRole('Super Admin') || Auth::user()->hasRole('Site Admin') || Auth::user()->hasRole('Site User'))
                     <li class="slide">
                         <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)"><i

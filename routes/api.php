@@ -10,6 +10,7 @@ use App\Http\Controllers\LockerController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\RequestedController;
 use App\Http\Controllers\CategoriesController;
 
 /*
@@ -114,5 +115,15 @@ Route::get('/product/count',[InventoryController::class,'productCount'])->name('
 Route::get('/product/list',[InventoryController::class,'productList'])->name('product/list');
 Route::delete('/product/delete/{id}',[InventoryController::class,'deleteProduct'])->name('product/delete');
 Route::post('/products/update',[InventoryController::class,'updateProduct'])->name('product/update');
+
+// add request of product
+Route::post('/request/add',[RequestedController::class,'add'])->name('request/add');
+Route::get('/product/request/count',[RequestedController::class,'requestCount'])->name('product/request/count');
+Route::get('/request/product/list',[RequestedController::class,'requestProductList'])->name('request/product/list');
+Route::post('/update/request/status',[RequestedController::class,'updateRequestStaus'])->name('update/request/status');
+Route::delete('/request/product/delete/{id}',[RequestedController::class,'deleteRequestedProduct']);
+
+
+
 
 
