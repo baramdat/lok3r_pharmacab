@@ -130,7 +130,7 @@ class LockerController extends Controller
             if ($history->save()) {
                 return response()->json([
                     'status' => 'success',
-                    // 'msg'=>'Locker has been added successfully'
+                    'msg'=>'Product quantity updated successfully'
                 ], 200);
             } else {
                 return response()->json([

@@ -115,9 +115,12 @@ Route::get('/product/count',[InventoryController::class,'productCount'])->name('
 Route::get('/product/list',[InventoryController::class,'productList'])->name('product/list');
 Route::delete('/product/delete/{id}',[InventoryController::class,'deleteProduct'])->name('product/delete');
 Route::post('/products/update',[InventoryController::class,'updateProduct'])->name('product/update');
+Route::post('/update/product/quantity',[InventoryController::class,'updateProductQuantity']);
+
 
 // add request of product
 Route::post('/request/add',[RequestedController::class,'add'])->name('request/add');
+Route::post('/product/request/add',[RequestedController::class,'addRequest']);
 Route::get('/product/request/count',[RequestedController::class,'requestCount'])->name('product/request/count');
 Route::get('/request/product/list',[RequestedController::class,'requestProductList'])->name('request/product/list');
 Route::post('/update/request/status',[RequestedController::class,'updateRequestStaus'])->name('update/request/status');

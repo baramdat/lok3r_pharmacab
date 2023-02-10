@@ -39,10 +39,10 @@ class RequestedController extends Controller
             $requests_p->site_id = Auth::user()->site_id;
             $requests_p->status = 'open';
             if ($requests_p->save()) {
-                $name= ucwords($requests_p->user->first_name) .' '.ucwords($requests_p->user->last_name);
+                $name = ucwords($requests_p->user->first_name) . ' ' . ucwords($requests_p->user->last_name);
                 $user = User::role(['Site Admin'])->where('site_id', Auth::user()->site_id)->first();
-                $user_name=ucwords($user->first_name) .' '.ucwords($user->last_name);
-                Mail::send('templates.email.product_request', ['user_name'=>$user_name,'name' =>$name,'quantity'=>$request->quantity, 'product' => $requests_p->inventory_item->name, 'site' => $requests_p->site->name], function ($message) use ($user) {
+                $user_name = ucwords($user->first_name) . ' ' . ucwords($user->last_name);
+                Mail::send('templates.email.product_request', ['user_name' => $user_name, 'name' => $name, 'quantity' => $request->quantity, 'product' => $requests_p->inventory_item->name, 'site' => $requests_p->site->name], function ($message) use ($user) {
                     $message->to($user->email)
                         ->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))
                         ->subject("Product requested ");
@@ -64,7 +64,29 @@ class RequestedController extends Controller
             ], 200);
         }
     }
-
+    public function addRequest(Request $request)
+    {
+        try {
+            $inputs = $request->input('requestedproduct');
+            foreach ($inputs as $id => $value) {
+                if ($value > 0) {
+                    $inventory = Inventory::where('item_id', $id)->first();
+                    $quantity = $inventory->quantity + $value;
+                    $inventory->quantity = $quantity;
+                    $inventory->save();
+                }
+            }
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Product requested quantity updated  successfully'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'fail',
+                'msg' => $e->getMessage()
+            ], 200);
+        }
+    }
     public function list()
     {
 

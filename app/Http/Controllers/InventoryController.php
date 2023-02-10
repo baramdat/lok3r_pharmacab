@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Locker;
 use App\Models\Inventory;
 use App\Models\Categories;
+use App\Models\Inventory_record;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Inventory_items;
@@ -41,7 +43,7 @@ class InventoryController extends Controller
                 $inventery->last_quantity = $request->quantity;
                 $inventery->parent_category_id = $request->parent;
                 $inventery->child_category_id = $request->child;
-                $inventery->site_id =Auth::user()->site_id;
+                $inventery->site_id = Auth::user()->site_id;
                 $inventery->save();
                 return response()->json([
                     'status' => 'success',
@@ -65,7 +67,7 @@ class InventoryController extends Controller
         try {
             $filterName = $request->filterName;
             $filterStatus = $request->filterStatus;
-            $filterItemId=$request->filterItemId;
+            $filterItemId = $request->filterItemId;
             $result = Inventory::query();
 
             if ($filterName != '') {
@@ -77,14 +79,14 @@ class InventoryController extends Controller
                     }
                 );
             }
-            if($filterItemId !=''){
-                $result = $result->where('item_id',$filterItemId);
+            if ($filterItemId != '') {
+                $result = $result->where('item_id', $filterItemId);
             }
             // if ($filterStatus !='all'){
             //     $result = $result->where('status',$filterStatus);
             // }  
 
-            $count = $result->where('site_id',Auth::user()->site_id)->count();
+            $count = $result->where('site_id', Auth::user()->site_id)->count();
             if ($count > 0) {
                 return response()->json(['status' => 'success', 'data' => $count]);
             } else {
@@ -104,7 +106,7 @@ class InventoryController extends Controller
             $filterName = $request->filterName;
             $filterStatus = $request->filterStatus;
             $filterLength = $request->filterLength;
-            $filterItemId=$request->filterItemId;
+            $filterItemId = $request->filterItemId;
             $result = Inventory::query();
             if ($filterName != '') {
                 $result = $result->whereHas(
@@ -115,12 +117,12 @@ class InventoryController extends Controller
                     }
                 );
             }
-            if($filterItemId !=''){
-                $result = $result->where('item_id',$filterItemId);
+            if ($filterItemId != '') {
+                $result = $result->where('item_id', $filterItemId);
             }
             $i = 1;
 
-            $products = $result->where('site_id',Auth::user()->site_id)->take($filterLength)->skip($request->offset)->orderBy('id', 'DESC')->get();
+            $products = $result->where('site_id', Auth::user()->site_id)->take($filterLength)->skip($request->offset)->orderBy('id', 'DESC')->get();
 
             if (isset($products) && sizeof($products) > 0) {
                 $html = '';
@@ -208,13 +210,13 @@ class InventoryController extends Controller
             }
             $inventery = Inventory::find($request->id);
             $inventery->quantity = $request->quantity;
-           // $inventery->last_quantity = $request->quantity;
+            // $inventery->last_quantity = $request->quantity;
             $inventery->parent_category_id = $request->parent;
             $inventery->child_category_id = $request->child;
             if ($inventery->save()) {
-                $ineventry_item=Inventory_items::find($inventery->item_id);
-                $ineventry_item->name=$request->name;
-                $ineventry_item->unit=$request->unit;
+                $ineventry_item = Inventory_items::find($inventery->item_id);
+                $ineventry_item->name = $request->name;
+                $ineventry_item->unit = $request->unit;
                 $ineventry_item->save();
                 return response()->json([
                     'status' => 'success',
@@ -226,6 +228,40 @@ class InventoryController extends Controller
                     'msg' => 'Failed to update the products'
                 ], 200);
             }
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'fail',
+                'msg' => $e->getMessage()
+            ], 200);
+        }
+    }
+    public function updateProductQuantity(Request $request)
+    {
+        try {
+            $inputs = $request->input('product');
+            $locker = Locker::find('3');
+            foreach ($inputs as $id => $value) {
+                if ($value > 0) {
+                    $inventory = Inventory::where('item_id', $id)->first();
+                    $quantity = $inventory->quantity + $value;
+                    $inventory->quantity = $quantity;
+                    $inventory->last_quantity = '+' . $value;
+                    $inventory->save();
+                    $history = new Inventory_record();
+                    $history->notes = "Product qantity updated by site admin";
+                    $history->locker_id = $locker->id;
+                    $history->user_id = Auth::user()->id;
+                    $history->site_id = Auth::user()->site_id;
+                    $history->item_id =  $id;
+                    $history->quantity = '+' . $value;
+                    $history->save();
+                }
+            }
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Product requested quantity updated  successfully',
+                'locker' => $locker
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'fail',

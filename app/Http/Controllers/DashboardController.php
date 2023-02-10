@@ -29,6 +29,7 @@ class DashboardController extends Controller
     }
     $products = Inventory::where('site_id',Auth::user()->site_id)->latest()->skip(0)->take(5)->get();
     $oldproduct = Inventory::where('site_id',Auth::user()->site_id)->latest()->skip(5)->take(7)->get();
-    return view('templates.dashboard',compact('locker_history','products','oldproduct','product_request'));
+    $inventory_item = Inventory::where('site_id', Auth::user()->site_id)->get();
+    return view('templates.dashboard',compact('locker_history','products','oldproduct','product_request','inventory_item'));
    }
 }
