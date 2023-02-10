@@ -68,11 +68,14 @@ class RequestedController extends Controller
     {
         try {
             $inputs = $request->input('requestedproduct');
+            $i=0;
+            $ids=0;
             foreach ($inputs as $id => $value) {
                 if ($value > 0) {
                     $inventory = Inventory::where('item_id', $id)->first();
                     $quantity = $inventory->quantity + $value;
                     $inventory->quantity = $quantity;
+                    $inventory->last_quantity = '+' . $value;
                     $inventory->save();
                 }
             }
