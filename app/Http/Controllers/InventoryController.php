@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Locker;
 use App\Models\Inventory;
 use App\Models\Categories;
-use App\Models\Inventory_record;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Inventory_items;
+use App\Models\Inventory_record;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 

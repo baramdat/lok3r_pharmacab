@@ -68,15 +68,27 @@ class RequestedController extends Controller
     {
         try {
             $inputs = $request->input('requestedproduct');
-            $i=0;
-            $ids=0;
+           
             foreach ($inputs as $id => $value) {
                 if ($value > 0) {
-                    $inventory = Inventory::where('item_id', $id)->first();
-                    $quantity = $inventory->quantity + $value;
-                    $inventory->quantity = $quantity;
-                    $inventory->last_quantity = '+' . $value;
-                    $inventory->save();
+                  
+                    if (Auth::user()->hasRole('Site User')) {
+                        $requests_p = new Requested_product();
+                        $requests_p->product_id = $id ? $id : '';
+                        $requests_p->quantity = $value;
+                        $requests_p->user_id = Auth::user()->id;
+                        $requests_p->site_id = Auth::user()->site_id;
+                        $requests_p->status = 'open';
+                        $requests_p->save();
+                    } else {
+                        $inventory = Inventory::where('item_id', $id)->first();
+                        $quantity = $inventory->quantity + $value;
+                        $inventory->quantity = $quantity;
+                        $inventory->last_quantity = '+' . $value;
+                        $inventory->save();
+                        $requests_update = Requested_product::where('site_id',Auth::user()->site_id)->where('status','open')->where('product_id',$id)->update(['status'=>'closed']);
+                       
+                    }
                 }
             }
             return response()->json([

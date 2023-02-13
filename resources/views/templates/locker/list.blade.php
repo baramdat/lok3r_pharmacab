@@ -234,7 +234,7 @@
                 filterRow = $("#filterRow").val();
                 filterColumn = $("#filterColumn").val();
 
-                filterLength = 10;
+                filterLength = 3;
             }
             lockerCount()
 
