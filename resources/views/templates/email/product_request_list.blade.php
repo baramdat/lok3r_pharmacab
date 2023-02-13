@@ -13,8 +13,7 @@
 
     <meta name="x-apple-disable-message-reformatting"> <!-- Disable auto-scale in iOS 10 Mail entirely -->
 
-    <title>Reset password - {{ env('APP_NAME') }}</title>
-    <!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title>Reset password - {{env('APP_NAME')}}</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
     ​
 
@@ -213,6 +212,7 @@
         }
 
         ​
+
     </style>
 
     ​
@@ -578,6 +578,7 @@
         }
 
         ​ ​ @media screen and (max-width: 500px) {}
+
     </style>
 
     ​
@@ -588,8 +589,7 @@
 
 ​
 
-<body width="100%"
-    style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
 
     <center style="width: 100%; background-color: #f1f1f1;">
 
@@ -603,7 +603,7 @@
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;" class="email-container">
 
             <!-- BEGIN BODY -->
-
+ 
             <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
                 style="margin: auto;">
 
@@ -621,8 +621,8 @@
 
                                         <a href="#" style="text-decoration: none;">
 
-                                            <img src="{{ asset(env('APP_LOGO')) }}" style="width: 100px">
-                                            <h2 style="color:#006f94; font-weight:bold; ">{{ env('APP_NAME') }}</h2>
+                                            <img src="{{asset(env('APP_LOGO'))}}" style="width: 100px">
+                                            <h2 style="color:#006f94; font-weight:bold; ">{{env('APP_NAME')}}</h2>
                                         </a><br>
 
                                     </h4>
@@ -639,20 +639,20 @@
 
                                         <h4>
 
-                                            <b>Dear {{ $user_name }} </b><br>
+                                            <b>Dear {{$user_name}} </b><br>
 
 
                                         </h4>
 
-                                        <p>Products requested from <b>{{ ucwords($site) }}</b> by
-                                            <b>{{ ucwords($name) }}
-                                            </b> Requested <b>{{ $quantity }}</b> boxes of
-                                            <b>{{ ucwords($product) }}</b>.
-
+                                        <p>Following products requested from <b>{{ ucwords($site) }}</b> by <br>{{ ucwords($name) }}:<br>
+                                             
+                                             @foreach($products as $pr)
+                                              <b>{{$pr['quantity'] }}</b> boxes of <b>{{ ucwords($pr['name']) }}</b><br>
+                                            @endforeach
+                                             
                                         </p>
-                                        If you need any help or assistance, please contact us at
-                                        <b>{{ env('mail_support') }}</b>. <br> <br>
-                                        <b>Regards, </b><br><span style="color:gray;"> {{ env('APP_NAME') }} </span>
+                                            If you need any help or assistance, please contact us at <b>{{env('mail_support')}}</b>. <br> <br>
+                                            <b>Regards, </b><br><span style="color:gray;"> {{env('APP_NAME')}} </span>
 
                                         </p>
 
@@ -679,7 +679,7 @@
 
                         <p style="color:white; font-family: 'Lato', sans-serif;">
 
-                            Powered by @ {{ env('APP_NAME') }} <br> <small>This is an auto generated email.</small>
+                            Powered by @ {{env('APP_NAME')}} <br> <small>This is an auto generated email.</small>
 
                         </p>
 

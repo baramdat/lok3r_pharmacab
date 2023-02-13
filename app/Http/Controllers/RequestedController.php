@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Inventory;
 use App\Models\Categories;
+use App\Models\Inventory_items;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Requested_product;
@@ -68,10 +69,10 @@ class RequestedController extends Controller
     {
         try {
             $inputs = $request->input('requestedproduct');
-           
+              $products=[];
+              $i=0;
             foreach ($inputs as $id => $value) {
                 if ($value > 0) {
-                  
                     if (Auth::user()->hasRole('Site User')) {
                         $requests_p = new Requested_product();
                         $requests_p->product_id = $id ? $id : '';
@@ -79,7 +80,11 @@ class RequestedController extends Controller
                         $requests_p->user_id = Auth::user()->id;
                         $requests_p->site_id = Auth::user()->site_id;
                         $requests_p->status = 'open';
-                        $requests_p->save();
+                        $product=Inventory_items::find($id);
+                        $products[$i]['name']=$product->name;
+                        $products[$i]['quantity']=$value;
+                       $requests_p->save();
+                       $i++;
                     } else {
                         $inventory = Inventory::where('item_id', $id)->first();
                         $quantity = $inventory->quantity + $value;
@@ -91,6 +96,18 @@ class RequestedController extends Controller
                     }
                 }
             }
+            if(count($products)>0 && Auth::user()->hasRole('Site User')){
+                $name = ucwords(Auth::user()->first_name) . ' ' . ucwords(Auth::user()->last_name);
+                $user = User::role(['Site Admin'])->where('site_id', Auth::user()->site_id)->first();
+                $user_name = ucwords($user->first_name) . ' ' . ucwords($user->last_name);
+                
+                Mail::send('templates.email.product_request_list', ['user_name' => $user_name, 'name' => $name,  'products' => $products, 'site' => $requests_p->site->name], function ($message) use ($user) {
+                    $message->to($user->email)
+                        ->from(env('MAIL_FROM_ADDRESS'), env('APP_NAME'))
+                        ->subject("Product requested ");
+                });
+            }
+            
             return response()->json([
                 'status' => 'success',
                 'msg' => 'Product requested quantity updated  successfully'
